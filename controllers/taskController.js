@@ -14,12 +14,23 @@ exports.createTask = async (req, res) => {
 
 exports.getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find({
+    const { priority, status, dueBefore, dueAfter } = req.query;
+    const filter = {
       $or: [
         { owner: req.user.id },
         { sharedWith: req.user.id }
       ]
-    }).sort({ createdAt: -1 });
+    };
+
+    if (priority) filter.priority = priority;
+    if (status) filter.status = status;
+    if (dueBefore || dueAfter) {
+      filter.dueDate = {};
+      if (dueBefore) filter.dueDate.$lte = new Date(dueBefore);
+      if (dueAfter) filter.dueDate.$gte = new Date(dueAfter);
+    }
+
+    const tasks = await Task.find(filter).sort({ createdAt: -1 });
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ error: 'Erro ao buscar tarefas.' });
