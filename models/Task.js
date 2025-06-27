@@ -16,9 +16,9 @@ const taskSchema = new mongoose.Schema({
     default: 'não iniciada'
   },
 
-  dueDate: { type: Date }, // data de entrega
+  dueDate: { type: Date },
 
-  completed: { type: Boolean, default: false }, // pode manter por compatibilidade
+  completed: { type: Boolean, default: false },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   sharedWith: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true });
