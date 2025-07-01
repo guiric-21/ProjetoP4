@@ -100,9 +100,10 @@ exports.deleteTask = async (req, res) => {
     }
 
     try {
-      await task.remove();
+      await Task.deleteOne({ _id: task._id });
       res.json({ message: 'Tarefa removida com sucesso.' });
     } catch (removeErr) {
+      console.error('Erro detalhado ao remover tarefa:', removeErr);
       res.status(500).json({ error: 'Erro inesperado ao remover a tarefa.' });
     }
   } catch (err) {
